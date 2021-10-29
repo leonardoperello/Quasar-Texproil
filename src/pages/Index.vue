@@ -1,17 +1,45 @@
 <template>
-  <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
-  </q-page>
+
+<q-page-container class="justify-center full-height full-width text-center">
+  
+ <logo></logo>
+
+  <div class="q-pa-md justify-center full-height full-width text-center">
+
+    <div class="row">
+      <div class="col">transaccion</div>
+      <div class="col">transaccion</div>
+      <div class="col">transaccion</div>
+    </div>
+
+    <div class="row">
+      <div class="col">transaccion</div>
+      <div class="col">transaccion</div>
+      <div class="col">transaccion</div>
+    </div>
+
+  </div>
+
+</q-page-container>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<style lang="sass" scoped>
+.row > div
+  padding: 50px 15px
+  background: $primary
+  border: 1px solid #26A69A
+  alignment: middle
+.row + .row
+  margin-top: 5rem
+</style>
 
-export default defineComponent({
-  name: 'PageIndex'
-})
+<script>
+import logo from './Logo.vue'
+
+export default {
+
+ components: {
+   logo: logo
+ },
+}
 </script>
