@@ -1,88 +1,112 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          @click="leftDrawerOpen = !leftDrawerOpen"
-          aria-label="Menu"
-        >
-          <q-icon name="menu" />
-        </q-btn>
+  <q-layout view="hHh lpR fFf">
 
+    <q-header elevated class="bg-primary text-white">
+      <q-toolbar>
         <q-toolbar-title>
-          Mariano, Walter, Leo
+          <q-avatar>
+            <logo></logo>
+          </q-avatar>
+          Texproil
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
-        <div class="golden-green q-ml-md rounded-borders">
-           <q-img
-            alt="Green logo"
-            src="assets/golden-tipo1.jpg"
-            style="width:35px;"
-            >
-            </q-img>
-        </div>
+        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      bordered
-      content-class="bg-grey-2"
-    >
-      <q-list>
+    <q-drawer v-model="rightDrawerOpen"  side="right" bordered>
+      <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+          <q-list padding>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="inbox" />
+              </q-item-section>
 
-        <!-- <q-separator spaced /> -->
+              <q-item-section>
+                Inbox
+              </q-item-section>
+            </q-item>
 
-        <q-item-label header>Links</q-item-label>
+            <q-item active clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="star" />
+              </q-item-section>
 
-        <q-item clickable tag="a" target="_blank" href="https://github.com/leonardoperello/Quasar-Texproil">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Github</q-item-label>
-            <q-item-label caption>github.com/grupo3</q-item-label>
-          </q-item-section>
-        </q-item>
+              <q-item-section>
+                Star
+              </q-item-section>
+            </q-item>
 
-      </q-list>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="send" />
+              </q-item-section>
+
+              <q-item-section>
+                Send
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="drafts" />
+              </q-item-section>
+
+              <q-item-section>
+                Drafts
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
+
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+          <div class="absolute-bottom bg-transparent">
+            <q-avatar size="56px" class="q-mb-sm">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+            <div class="text-weight-bold">Supervisor</div>
+            <div>@rstoenescu</div>
+          </div>
+        </q-img>
     </q-drawer>
 
     <q-page-container>
       <router-view />
-
-      <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
-            <q-btn fab icon="keyboard_arrow_up" color="primary" />
-      </q-page-scroller>
-
     </q-page-container>
+
+    <q-footer elevated class="bg-grey-8 text-white">
+      <q-toolbar>
+        <q-toolbar-title>
+          <div> Texproil </div>
+        </q-toolbar-title>
+        <div> Copyright 2017 © texproil / Diseñado por ig innovations </div>
+      </q-toolbar>
+    </q-footer>
+
   </q-layout>
 </template>
 
 <script>
-import { openURL, useQuasar  } from 'quasar'
+import { ref } from 'vue'
+import logo from '../pages/Logo2.vue'
 
 export default {
-  name: 'MyLayout',
-  data () {
-    return {
-      leftDrawerOpen: this.$q.platform.is.desktop
-    }
-  },
-  methods: {
-    openURL
-  },
-
+  components: {
+   logo: logo
+ },
   setup () {
-    const $q = useQuasar()
+    const rightDrawerOpen = ref(false)
 
-    // calling here; equivalent to when component is created
-    $q.dark.set(false)
+    return {
+      rightDrawerOpen,
+      toggleRightDrawer () {
+        rightDrawerOpen.value = !rightDrawerOpen.value
+      }
+    }
   }
+
+
+
 }
 </script>
 
