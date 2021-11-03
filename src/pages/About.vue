@@ -6,42 +6,41 @@
   </div>
 </template>
 
-
 <script>
 export default {
-  name: "Otis",
+  name: 'Otis',
   data() {
     return {
-      otis: [],
-    };
+      otis: []
+    }
   },
   mounted() {
-    this.getOtis();
-    this.getSectores();
+    this.getOtis()
+    this.getSectores()
   },
   methods: {
     getOtis() {
       this.$axios
-        .get("http://localhost:8081/oti")
+        .get('http://localhost:8081/oti')
         .then((res) => {
-          this.otis = res.data;
-          console.log("OTIS", res.data);
+          this.otis = res.data
+          console.log('OTIS', res.data)
         })
         .catch((err) => {
-          console.err;
-        });
+          console.err
+        })
     },
     getSectores() {
       this.$axios
-        .get("http://localhost:8081/sector")
+        .get('http://localhost:8081/sector')
         .then((res) => {
-          this.sectores = res.data;
-          console.log("SECTORES", res.data);
+          this.sectores = res.data
+          console.log('SECTORES', res.data)
         })
         .catch((err) => {
-          console.err;
-        });
-    },
-  },
-};
+          console.err
+        })
+    }
+  }
+}
 </script>

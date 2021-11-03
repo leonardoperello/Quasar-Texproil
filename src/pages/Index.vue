@@ -1,74 +1,75 @@
 <template>
+  <q-page-container class="justify-center full-height full-width text-center">
+    <logo></logo>
 
-<q-page-container class="justify-center full-height full-width text-center">
-  
- <logo></logo>
-
-  <div class="q-pa-md justify-center full-height full-width text-center">
-
-    <div class="row">
-      <div class="col q-pa-md q-gutter-sm">
-        <q-btn 
-        padding="xs"
-        icon="eco" color="white" 
-        text-color="black" 
-        label="Cargar orden de producción"
-        to="/orden"
-         />
+    <div class="q-pa-md justify-center full-height full-width text-center">
+      <div class="row">
+        <div class="col q-pa-md q-gutter-sm">
+          <q-btn
+            padding="xs"
+            icon="eco"
+            color="white"
+            text-color="black"
+            label="Cargar orden de producción"
+            to="/orden"
+          />
+        </div>
+        <div class="col q-pa-md q-gutter-sm">
+          <q-btn
+            padding="xs"
+            icon="eco"
+            color="white"
+            text-color="black"
+            label="Cargar OTI"
+            to="/orden"
+          />
+        </div>
+        <div class="col q-pa-md q-gutter-sm">
+          <q-btn
+            padding="xs"
+            icon="eco"
+            color="white"
+            text-color="black"
+            label="Asignar Tarea"
+            to="/orden"
+          />
+        </div>
       </div>
-      <div class="col q-pa-md q-gutter-sm">
-        <q-btn 
-        padding="xs"
-        icon="eco" color="white" 
-        text-color="black" 
-        label="Cargar OTI"
-        to="/orden"
-         />
-      </div>
-      <div class="col q-pa-md q-gutter-sm">
-        <q-btn 
-        padding="xs"
-        icon="eco" color="white" 
-        text-color="black" 
-        label="Asignar Tarea"
-        to="/orden"
-         />
+
+      <div class="row">
+        <div class="col q-pa-md q-gutter-sm">
+          <q-btn
+            padding="xs"
+            icon="eco"
+            color="white"
+            text-color="black"
+            label="Cambiar Estado"
+            to="/orden"
+          />
+        </div>
+        <div class="col q-pa-md q-gutter-sm">
+          <q-btn
+            padding="xs"
+            icon="eco"
+            color="white"
+            text-color="black"
+            label="Visualizar OTIs"
+            to="/orden"
+          />
+        </div>
+        <div class="col q-pa-md q-gutter-sm">
+          <q-btn
+            padding="xs"
+            icon="eco"
+            color="white"
+            text-color="black"
+            label="Visualizar tareas"
+            to="/orden"
+          />
+        </div>
       </div>
     </div>
-
-    <div class="row">
-      <div class="col q-pa-md q-gutter-sm">
-        <q-btn 
-        padding="xs"
-        icon="eco" color="white" 
-        text-color="black" 
-        label="Cambiar Estado"
-        to="/orden"
-         />
-      </div>
-      <div class="col q-pa-md q-gutter-sm">
-        <q-btn 
-        padding="xs"
-        icon="eco" color="white" 
-        text-color="black" 
-        label="Visualizar OTIs"
-        to="/orden"
-         />
-      </div>
-      <div class="col q-pa-md q-gutter-sm">
-        <q-btn 
-        padding="xs"
-        icon="eco" color="white" 
-        text-color="black" 
-        label="Visualizar tareas"
-        to="/orden"
-         />
-      </div>
-    </div>
-
-  </div>
-
-</q-page-container>
+  </q-page-container>
 </template>
 
 <style lang="sass" scoped>
@@ -85,9 +86,19 @@
 import logo from './Logo.vue'
 
 export default {
-
- components: {
-   logo: logo
- },
+  components: {
+    logo: logo
+  }
 }
 </script>
+
+<style lang="scss">
+row {
+  border: 5px solid black;
+}
+col {
+  border: 5px solid black;
+  padding: 5px;
+}
+</style>
+>
