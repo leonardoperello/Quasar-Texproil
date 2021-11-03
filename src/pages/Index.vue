@@ -7,15 +7,63 @@
   <div class="q-pa-md justify-center full-height full-width text-center">
 
     <div class="row">
-      <div class="col">transaccion</div>
-      <div class="col">transaccion</div>
-      <div class="col">transaccion</div>
+      <div class="col q-pa-md q-gutter-sm">
+        <q-btn 
+        padding="xs"
+        icon="eco" color="white" 
+        text-color="black" 
+        label="Cargar orden de producción"
+        to="/orden"
+         />
+      </div>
+      <div class="col q-pa-md q-gutter-sm">
+        <q-btn 
+        padding="xs"
+        icon="eco" color="white" 
+        text-color="black" 
+        label="Cargar OTI"
+        to="/orden"
+         />
+      </div>
+      <div class="col q-pa-md q-gutter-sm">
+        <q-btn 
+        padding="xs"
+        icon="eco" color="white" 
+        text-color="black" 
+        label="Asignar Tarea"
+        to="/orden"
+         />
+      </div>
     </div>
 
     <div class="row">
-      <div class="col">transaccion</div>
-      <div class="col">transaccion</div>
-      <div class="col">transaccion</div>
+      <div class="col q-pa-md q-gutter-sm">
+        <q-btn 
+        padding="xs"
+        icon="eco" color="white" 
+        text-color="black" 
+        label="Cambiar Estado"
+        to="/orden"
+         />
+      </div>
+      <div class="col q-pa-md q-gutter-sm">
+        <q-btn 
+        padding="xs"
+        icon="eco" color="white" 
+        text-color="black" 
+        label="Visualizar OTIs"
+        to="/orden"
+         />
+      </div>
+      <div class="col q-pa-md q-gutter-sm">
+        <q-btn 
+        padding="xs"
+        icon="eco" color="white" 
+        text-color="black" 
+        label="Visualizar tareas"
+        to="/orden"
+         />
+      </div>
     </div>
 
   </div>
@@ -27,7 +75,7 @@
 .row > div
   padding: 50px 15px
   background: $primary
-  border: 1px solid #26A69A
+  border: 5px solid white
   alignment: middle
 .row + .row
   margin-top: 5rem
