@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+    <q-header elevated class="bg-secondary text-white">
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
@@ -59,7 +59,7 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white">
+    <q-footer elevated class="bg-dark text-white">
       <q-toolbar>
         <q-toolbar-title>
           <div>Texproil</div>
