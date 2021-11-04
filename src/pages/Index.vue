@@ -7,7 +7,7 @@
         <div class="col q-pa-md q-gutter-sm">
           <q-btn
             padding="xs"
-            icon="eco"
+            icon="brightness_5"
             color="white"
             text-color="black"
             label="Cargar orden de producción"
@@ -17,21 +17,21 @@
         <div class="col q-pa-md q-gutter-sm">
           <q-btn
             padding="xs"
-            icon="eco"
+            icon="brightness_5"
             color="white"
             text-color="black"
             label="Cargar OTI"
-            to="/orden"
+            to="/oti"
           />
         </div>
         <div class="col q-pa-md q-gutter-sm">
           <q-btn
             padding="xs"
-            icon="eco"
+            icon="brightness_5"
             color="white"
             text-color="black"
             label="Asignar Tarea"
-            to="/orden"
+            to="/"
           />
         </div>
       </div>
@@ -40,31 +40,31 @@
         <div class="col q-pa-md q-gutter-sm">
           <q-btn
             padding="xs"
-            icon="eco"
+            icon="brightness_5"
             color="white"
             text-color="black"
             label="Cambiar Estado"
-            to="/orden"
+            to="/"
           />
         </div>
         <div class="col q-pa-md q-gutter-sm">
           <q-btn
             padding="xs"
-            icon="eco"
+            icon="brightness_5"
             color="white"
             text-color="black"
             label="Visualizar OTIs"
-            to="/orden"
+            to="/"
           />
         </div>
         <div class="col q-pa-md q-gutter-sm">
           <q-btn
             padding="xs"
-            icon="eco"
+            icon="brightness_5"
             color="white"
             text-color="black"
             label="Visualizar tareas"
-            to="/orden"
+            to="/"
           />
         </div>
       </div>
