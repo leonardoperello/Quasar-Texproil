@@ -1,6 +1,11 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-secondary text-white">
+    <q-header
+      reveal
+      elevated
+      class="textHeader bg-secondary text-white"
+      :class="$q.dark.isActive ? 'header_dark' : 'header_normal'"
+    >
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
@@ -9,6 +14,13 @@
           Texproil
         </q-toolbar-title>
 
+        <q-btn
+          class="q-mr-xs"
+          flat
+          round
+          @click="$q.dark.toggle()"
+          :icon="$q.dark.isActive ? 'nights_stay' : 'wb_sunny'"
+        />
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
     </q-header>
@@ -90,5 +102,3 @@ export default {
   }
 }
 </script>
-
-<style></style>
