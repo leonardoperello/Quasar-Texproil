@@ -179,7 +179,6 @@ export default {
         .get('http://localhost:8081/cliente/' + parameter)
         .then((res) => {
           this.cliente = res.data
-          this.form2 = true
           console.log('clientes', res.data)
         })
         .catch((err) => {

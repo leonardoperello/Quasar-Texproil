@@ -55,7 +55,7 @@
           <q-separator dark />
 
           <q-card-actions vertical align="center">
-            <q-btn flat padding="xs">Ir</q-btn>
+            <q-btn flat padding="xs" to="/asignar">Ir</q-btn>
           </q-card-actions>
         </q-card>
       </div>
