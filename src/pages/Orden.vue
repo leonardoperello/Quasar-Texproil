@@ -8,19 +8,22 @@
     >
       <q-header elevated>
         <q-toolbar>
+          <q-toolbar-title> CARGAR ORDEN DE PRODUCCIÓN </q-toolbar-title>
           <q-btn
             padding="xs"
-            color="white"
-            text-color="black"
+            color="red"
+            text-color="white"
             label="Volver"
             to="/"
           />
-          <q-toolbar-title> Cargar Orden de Producción </q-toolbar-title>
         </q-toolbar>
       </q-header>
       <q-page padding class="full-height full-width">
         <div class="q-pa-md q-mt-md row justify-between">
-          <div class="q-pa-xs q-mt-md row items-center q-gutter-*">
+          <div
+            v-if="rosca === ''"
+            class="q-pa-xs q-mt-md row items-center q-gutter-*"
+          >
             <q-form class="row q-col-gutter-md">
               <h5>Crear rosca</h5>
               <div class="col-12 col-sm-6">
@@ -52,15 +55,18 @@
                 </q-input>
                 <q-btn
                   class="q-ml-sm q-mt-sm"
-                  color="primary"
+                  color="positive"
                   label="Crear rosca"
                   @click="postRosca(descripcionRosca, medida, tipoRosca)"
                 />
               </div>
             </q-form>
           </div>
-          <div class="q-pa-xs row items-center q-gutter-*">
-            <q-form v-if="rosca !== ''" class="row q-col-gutter-md">
+          <div
+            v-if="rosca !== '' && cliente === ''"
+            class="q-pa-xs row items-center q-gutter-*"
+          >
+            <q-form class="row q-col-gutter-md">
               <h5>Datos del cliente</h5>
               <div class="col-12 col-sm-6">
                 <q-input
@@ -72,31 +78,47 @@
 
                 <q-btn
                   class="q-ml-sm q-mt-sm"
-                  color="primary"
-                  label="Buscar"
+                  color="positive"
+                  label="Cargar cliente"
                   @click="getClientes(cuit)"
                 />
-                <!--
-                <div class="q-pa-xs q-mt-md row items-center q-gutter-*">
-                  <span v-if="cliente !== undefined">
-                    Nombre: {{ cliente.nombre }}
-                  </span>
-                </div>
-                <div class="q-pa-xs q-mt-md row items-center q-gutter-*">
-                  <span v-if="cliente !== undefined">
-                    Apellido: {{ cliente.apellido }}
-                  </span>
-                </div> -->
-                <div class="q-pa-xs q-mt-md row items-center q-gutter-*">
-                  <span v-if="cliente !== undefined">
-                    Empresa: {{ cliente.nombreEmpresa }}
-                  </span>
-                </div>
               </div>
             </q-form>
           </div>
+
           <div
-            v-if="rosca !== '' && cliente !== ''"
+            v-if="rosca !== '' && cliente !== '' && supervisorCargado === false"
+            class="q-pa-xs row items-center q-gutter-*"
+          >
+            <q-form class="row q-col-gutter-md">
+              <div class="col-12">
+                <h5>Seleccione un supervisor</h5>
+                <q-select
+                  transition-show="scale"
+                  transition-hide="scale"
+                  filled
+                  style="width: 250px"
+                  v-model="supervisor"
+                  :options="supervisores"
+                  option-label="apellido"
+                  label="Seleccione un supervisor"
+                  lazy-rules
+                  emit-value
+                  map-options
+                  :rules="[(val) => !!val || 'Campo obligatorio']"
+                />
+                <q-btn
+                  class="q-ml-sm q-mt-sm"
+                  color="positive"
+                  label="Cargar supervisor"
+                  @click="cargarSupervisor(supervisor)"
+                />
+              </div>
+            </q-form>
+          </div>
+
+          <div
+            v-if="rosca !== '' && cliente !== '' && supervisorCargado === true"
             class="q-pa-xs row items-center q-gutter-*"
           >
             <q-form>
@@ -139,9 +161,9 @@
               </div>
               <q-btn
                 class="q-ml-sm q-mt-sm"
-                color="primary"
+                color="positive"
                 label="Crear orden"
-                @click="postOrden(detalleOrden, fechaOrden)"
+                @click="postOrden(detalleOrden, fechaOrden, supervisor)"
               />
             </q-form>
           </div>
@@ -154,6 +176,8 @@
 <script>
 import { ref } from 'vue'
 import { date } from 'quasar'
+import { useQuasar } from 'quasar'
+import { Notify } from 'quasar'
 export default {
   data() {
     return {
@@ -161,82 +185,175 @@ export default {
       cliente: '',
       tipoRosca: '',
       options: [],
+      supervisores: [],
       descripcionRosca: '',
       medida: '',
       fechaOrden: '',
       detalleOrden: '',
       rosca: '',
-      orden: ''
+      orden: '',
+      supervisor: '',
+      supervisorCargado: false
     }
   },
   mounted() {
-    this.getClientes(), this.getTipoRosca()
+    this.getTipoRosca(), this.getSupervisores()
   },
   methods: {
     getClientes(cuit) {
-      let parameter = cuit
-      this.$axios
-        .get('http://localhost:8081/cliente/' + parameter)
-        .then((res) => {
-          this.cliente = res.data
-          console.log('clientes', res.data)
+      if (cuit === '') {
+        Notify.create({
+          message: 'Falta agregar el campo CUIT',
+          type: 'info',
+          color: 'negative'
         })
-        .catch((err) => {
-          console.err
-        })
+      } else {
+        let parameter = cuit
+        this.$axios
+          .get('http://localhost:8081/cliente/' + parameter)
+          .then((res) => {
+            this.cliente = res.data
+            if (this.cliente) {
+              Notify.create({
+                message: 'El cliente se ha cargado con exito',
+                type: 'positive',
+                color: 'positive'
+              })
+            } else {
+              Notify.create({
+                message: 'No existe un cliente con el CUIT: ' + cuit,
+                icon: 'close',
+                color: 'negative'
+              })
+            }
+          })
+          .catch((err) => {
+            console.err
+          })
+      }
     },
+
     getTipoRosca() {
       this.$axios
         .get('http://localhost:8081/rosca/tipoDeRosca')
         .then((res) => {
           this.options = res.data
-          console.log('tipos de rosca', res.data)
         })
         .catch((err) => {
           console.err
         })
     },
+
+    getSupervisores() {
+      this.$axios
+        .get('http://localhost:8081/supervisor')
+        .then((res) => {
+          this.supervisores = res.data
+        })
+        .catch((err) => {
+          console.err
+        })
+    },
+
+    cargarSupervisor(supervisor) {
+      if (supervisor === '') {
+        Notify.create({
+          message: 'Falta seleccionar un supervisor',
+          type: 'info',
+          color: 'negative'
+        })
+      } else {
+        Notify.create({
+          message: 'El supervisor se ha cargado correctamente',
+          type: 'positive',
+          color: 'positive'
+        })
+        this.supervisorCargado = true
+      }
+    },
+
     postRosca(descripcionRosca, medida, tipoRosca) {
-      this.$axios
-        .post('http://localhost:8081/rosca/', {
-          descripcionTecnica: descripcionRosca,
-          medida: medida,
-          tipoDeRosca: tipoRosca
+      if (tipoRosca === '' || medida === '' || descripcionRosca === '') {
+        Notify.create({
+          message: 'Falta completar algunos campos obligatorios',
+          type: 'info',
+          color: 'negative'
         })
-        .then((res) => {
-          this.rosca = res.data
-          console.log('creando rosca...', res.data)
-        })
-        .catch((err) => {
-          console.err
-        })
+      } else {
+        this.$axios
+          .post('http://localhost:8081/rosca/', {
+            descripcionTecnica: descripcionRosca,
+            medida: medida,
+            tipoDeRosca: tipoRosca
+          })
+          .then((res) => {
+            this.rosca = res.data
+            if (this.rosca) {
+              Notify.create({
+                message: 'La rosca se ha creado con exito',
+                type: 'positive',
+                color: 'positive'
+              })
+            } else {
+              Notify.create({
+                message: 'Error al cargar la rosca, vuelva a intentarlo',
+                icon: 'close',
+                color: 'negative'
+              })
+            }
+          })
+          .catch((err) => {
+            console.err
+          })
+      }
     },
-    postOrden(detalleOrden, fechaOrden) {
+    postOrden(detalleOrden, fechaOrden, supervisor) {
       const fechaAux = date.formatDate(fechaOrden, 'YYYY-MM-DD')
-      this.$axios
-        .post('http://localhost:8081/orden/crearOrdenProduccion', {
-          rosca: this.rosca,
-          detalle: detalleOrden,
-          fecha: fechaAux,
-          cuitCliente: this.cliente.CUIT,
-          supervisor: {
-            numeroEmpleado: 5.0,
-            DNI: '20-596-7118',
-            nombre: 'Suzanne',
-            apellido: 'Kleynermans',
-            telefono: '253-396-2243',
-            nombreUsuario: 'skleynermans4',
-            contraseña: 'LACiCk',
-            email: 'skleynermans4@acquirethisname.com'
-          }
+      if (detalleOrden === '' || fechaOrden === '' || supervisor === '') {
+        Notify.create({
+          message: 'Falta completar algunos campos obligatorios',
+          type: 'info',
+          color: 'negative'
         })
-        .then((res) => {
-          this.rosca = res.data
-          console.log('creando orden...', res.data)
-        })
-        .catch((err) => {
-          console.err
-        })
+      } else {
+        this.$axios
+          .post('http://localhost:8081/orden/crearOrdenProduccion', {
+            rosca: this.rosca,
+            detalle: detalleOrden,
+            fecha: fechaAux,
+            cuitCliente: this.cliente.CUIT,
+            supervisor: supervisor
+          })
+          .then((res) => {
+            this.orden = res.data
+            if (this.orden) {
+              Notify.create({
+                message: 'La orden de producción se ha cargado con exito',
+                type: 'positive',
+                color: 'positive'
+              }),
+                (this.rosca = ''),
+                (this.cliente = ''),
+                (this.orden = ''),
+                (this.tipoRosca = ''),
+                (this.descripcionRosca = ''),
+                (this.medida = ''),
+                (this.cuit = ''),
+                (this.supervisor = ''),
+                (this.detalleOrden = ''),
+                (this.fechaOrden = '')
+            } else {
+              Notify.create({
+                message: 'Error al cargar la orden de producción',
+                type: 'close',
+                color: 'negative'
+              })
+            }
+          })
+          .catch((err) => {
+            console.err
+          })
+      }
     }
   }
 }
