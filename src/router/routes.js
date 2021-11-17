@@ -3,10 +3,42 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: '/about', component: () => import('pages/About.vue') },
-      { path: '/orden', component: () => import('pages/Orden.vue') },
-      { path: '/oti', component: () => import('pages/Oti.vue') }
+      { path: '', component: () => import('pages/login.vue') },
+      {
+        path: '/menu',
+        component: () => import('pages/Index.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/about',
+        component: () => import('pages/About.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/orden',
+        component: () => import('pages/Orden.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/oti',
+        component: () => import('pages/Oti.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/menuOperario',
+        component: () => import('pages/operario.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      }
     ]
   },
 

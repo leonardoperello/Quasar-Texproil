@@ -8,52 +8,11 @@
           </q-avatar>
           Texproil
         </q-toolbar-title>
-
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
+        <q-toolbar-title>
+          {{ user ? user.displayName : '' }}
+        </q-toolbar-title>
       </q-toolbar>
     </q-header>
-
-    <q-drawer v-model="rightDrawerOpen" side="right" bordered>
-      <q-scroll-area
-        style="
-          height: calc(100% - 150px);
-          margin-top: 150px;
-          border-right: 1px solid #ddd;
-        "
-      >
-        <q-list padding>
-          <q-item clickable v-ripple to="/">
-            <q-item-section avatar>
-              <q-icon name="inbox" />
-            </q-item-section>
-
-            <q-item-section> Inicio </q-item-section>
-          </q-item>
-
-          <q-item active clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="star" />
-            </q-item-section>
-
-            <q-item-section> About </q-item-section>
-          </q-item>
-        </q-list>
-      </q-scroll-area>
-
-      <q-img
-        class="absolute-top"
-        src="https://cdn.quasar.dev/img/material.png"
-        style="height: 150px"
-      >
-        <div class="absolute-bottom bg-transparent">
-          <q-avatar size="56px" class="q-mb-sm">
-            <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-          </q-avatar>
-          <div class="text-weight-bold">Supervisor</div>
-          <div>@supervisor</div>
-        </div>
-      </q-img>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -73,20 +32,25 @@
 <script>
 import { ref } from 'vue'
 import logo from '../pages/Logo2.vue'
+import { getAuth } from 'firebase/auth'
 
 export default {
   components: {
     logo: logo
   },
-  setup() {
-    const rightDrawerOpen = ref(false)
-
+  data() {
     return {
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value
-      }
+      user: null
     }
+  },
+
+  methods: {
+    async datos() {}
+  },
+  created() {
+    const auth = getAuth()
+    this.user = auth.currentUser
+    console.log(this.user)
   }
 }
 </script>

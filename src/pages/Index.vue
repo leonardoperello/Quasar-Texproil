@@ -1,7 +1,6 @@
 <template>
   <q-page-container class="justify-center full-height full-width text-center">
     <logo></logo>
-
     <div class="q-pa-md justify-center full-height full-width text-center">
       <div class="row">
         <div class="col q-pa-md q-gutter-sm">
@@ -86,9 +85,7 @@
 import logo from './Logo.vue'
 
 export default {
-  components: {
-    logo: logo
-  }
+  components: { logo }
 }
 </script>
 

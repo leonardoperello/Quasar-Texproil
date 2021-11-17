@@ -13,7 +13,7 @@
             color="white"
             text-color="black"
             label="Volver"
-            to="/"
+            to="/menu"
           />
           <q-toolbar-title> Cargar Orden de Trabajo Interna </q-toolbar-title>
         </q-toolbar>
@@ -126,7 +126,7 @@ export default {
   methods: {
     getOrdenes() {
       this.$axios
-        .get('http://localhost:8081/oti/obtenerOrdenes/')
+        .get('http://localhost:8081/oti/obtenerOrdenes/2019-04-01')
         .then((res) => {
           this.otis = res.data
           console.log('OTIS', res.data)
