@@ -24,13 +24,11 @@
           <div class="q-pa-md">
             <div class="row">
               <div class="col">
-                <div class="text-subtitle1">Seleccionar fecha de ordenes</div>
+                <div class="text-subtitle1" font-family="Arial">
+                  Seleccionar fecha de ordenes
+                </div>
                 <div class="q-pa-md" style="max-width: 400px">
-                  <q-form
-                    @submit="onSubmit"
-                    @reset="onReset"
-                    class="q-gutter-md"
-                  >
+                  <q-form @submit="onSubmit" class="q-gutter-md">
                     <q-input
                       filled
                       v-model="date"
@@ -263,5 +261,11 @@ const rows = [
 }
 .row + .row {
   margin-top: 1rem;
+}
+.col {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.q-toolbar-title {
+  font-family: Arial, Helvetica, sans-serif;
 }
 </style>
