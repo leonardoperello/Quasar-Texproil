@@ -87,10 +87,12 @@
                 <q-select
                   transition-show="scale"
                   transition-hide="scale"
+                  clearable
                   filled
                   v-model="tareas"
                   multiple
                   :options="optionsTareas"
+                  option-label="nombre"
                   counter
                   hint="With counter"
                   style="width: 250px"
@@ -103,6 +105,37 @@
                   class="q-ml-sm q-mt-sm"
                   color="primary"
                   label="Seleccionar"
+                  @click="getOperarios()"
+                />
+              </div>
+            </q-form>
+          </div>
+          <div
+            v-if="sector !== ''"
+            class="q-pa-xs q-mt-md row items-center q-gutter-*"
+          >
+            <q-form class="row q-col-gutter-md">
+              <h5>Seleccionar Operario</h5>
+              <div class="col-12 col-sm-6">
+                <q-select
+                  transition-show="scale"
+                  transition-hide="scale"
+                  filled
+                  style="width: 250px"
+                  v-model="operario"
+                  :options="optionsOperarios"
+                  option-label="nombre"
+                  label="Seleccione un Operario"
+                  lazy-rules
+                  emit-value
+                  map-options
+                  :rules="[(val) => !!val || 'Campo obligatorio']"
+                />
+                <q-btn
+                  class="q-ml-sm q-mt-sm"
+                  color="primary"
+                  label="Seleccionar"
+                  @click="postAsignar()"
                 />
               </div>
             </q-form>
@@ -120,8 +153,11 @@ export default {
       optionsSectores: [],
       optionsOtis: [],
       optionsTareas: [],
+      optionsOperarios: [],
       sector: '',
       oti: '',
+      operario: '',
+      asignar: '',
       tareas: []
     }
   },
@@ -154,7 +190,29 @@ export default {
         'http://localhost:8081/tarea/obtenerTareas/' + parameter
       )
       this.optionsTareas = salida.data
-      console.log('otis', salida)
+      console.log('tareas de la oti', salida)
+    },
+    async getOperarios() {
+      console.log('estoy en axios Operario')
+      const salida = await this.$axios.get('http://localhost:8081/operario/')
+      this.optionsOperarios = salida.data
+      console.log('operarios', salida.data)
+    },
+    postAsignar() {
+      this.$axios
+        .post('http://localhost:8081/tarea/asignarTarea ', {
+          idOti: this.oti.idOti,
+          idOperario: this.operario._id,
+          observacion: 'observacion',
+          tareas: this.tareas
+        })
+        .then((res) => {
+          this.asignar = res.data
+          console.log('asignando tareas...', res.data)
+        })
+        .catch((err) => {
+          console.err
+        })
     }
   }
 }
