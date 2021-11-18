@@ -16,7 +16,7 @@
     <q-stepper v-model="step" vertical color="primary" animated>
       <q-step
         :name="1"
-        title="Seleccione un sectors"
+        title="Seleccione un sector"
         icon="settings"
         :done="step > 1"
       >
@@ -40,7 +40,13 @@
         </q-form>
 
         <q-stepper-navigation>
-          <q-btn @click="getOtis(sector, 2)" color="primary" label="Continue" />
+          <q-btn
+            v-if="sector"
+            @click="getOtis(sector, 2)"
+            color="primary"
+            label="Siguiente"
+          />
+          <q-btn v-if="!sector" disable color="primary" label="Siguiente" />
         </q-stepper-navigation>
       </q-step>
 
@@ -69,12 +75,18 @@
           </div>
         </q-form>
         <q-stepper-navigation>
-          <q-btn @click="getTareas(oti, 3)" color="primary" label="Continue" />
           <q-btn
-            flat
-            @click="step = 1"
+            v-if="oti"
+            @click="getTareas(oti, 3)"
             color="primary"
-            label="Back"
+            label="Siguiente"
+          />
+          <q-btn v-if="!oti" disable color="primary" label="Siguiente" />
+          <q-btn
+            @click="step = 1"
+            flat
+            color="primary"
+            label="Atras"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
@@ -101,15 +113,22 @@
         </q-form>
         <q-stepper-navigation>
           <q-btn
+            v-if="tareas.length > 0"
             @click="getOperarios(tareas, 4)"
             color="primary"
-            label="Continue"
+            label="Siguiente"
           />
           <q-btn
-            flat
-            @click="step = 2"
+            v-if="tareas.length === 0"
+            disable
             color="primary"
-            label="Back"
+            label="Siguiente"
+          />
+          <q-btn
+            @click="step = 2"
+            flat
+            color="primary"
+            label="Atras"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
@@ -142,15 +161,22 @@
         </q-form>
         <q-stepper-navigation>
           <q-btn
+            v-if="operario && observacion"
             @click="postAsignar(operario, observacion)"
-            color="primary"
+            color="positive"
             label="crear"
           />
           <q-btn
-            flat
+            v-if="!operario || !observacion"
+            disable
+            color="positive"
+            label="crear"
+          />
+          <q-btn
             @click="step = 3"
+            flat
             color="primary"
-            label="Back"
+            label="Atras"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
@@ -174,9 +200,6 @@ export default {
       asignar: '',
       tareas: [],
       observacion: '',
-      cargarSector: false,
-      cargarOti: false,
-      cargarTarea: false,
       step: 1
     }
   },
@@ -199,134 +222,62 @@ export default {
 
     async getOtis(sector, num) {
       this.step = num
-      console.log('hola')
-      if (sector === '') {
-        Notify.create({
-          message: 'Debe seleccionar un sector.',
-          type: 'info',
-          color: 'negative'
-        })
-      } else {
-        const parameter = sector.nombre
-        const salida = await this.$axios.get(
-          'http://localhost:8081/tarea/obtenerOtis/' + parameter
-        )
-        this.optionsOtis = salida.data
-        if (this.optionsOtis) {
-          Notify.create({
-            message: 'El sector se ha cargado con exito',
-            type: 'positive',
-            color: 'positive'
-          })
-          this.cargarSector = true
-        } else {
-          Notify.create({
-            message: 'Error al cargar el sector',
-            type: 'info',
-            color: 'negative'
-          })
-        }
-      }
+      const parameter = sector.nombre
+      const salida = await this.$axios.get(
+        'http://localhost:8081/tarea/obtenerOtis/' + parameter
+      )
+      this.optionsOtis = salida.data
     },
 
     async getTareas(oti, num) {
       this.step = num
-      if (oti === '') {
-        Notify.create({
-          message: 'Debe seleccionar una OTI.',
-          type: 'info',
-          color: 'negative'
-        })
-      } else {
-        console.log(oti.idOti)
-        let parameter = oti.idOti
-        const salida = await this.$axios.get(
-          'http://localhost:8081/tarea/obtenerTareas/' + parameter
-        )
-        this.optionsTareas = salida.data
-        if (this.optionsTareas) {
-          Notify.create({
-            message: 'La OTI se ha cargado con exito',
-            type: 'positive',
-            color: 'positive'
-          })
-          this.cargarOti = true
-        } else {
-          Notify.create({
-            message: 'Error al cargar la OTI',
-            type: 'info',
-            color: 'negative'
-          })
-        }
-      }
+      let parameter = oti.idOti
+      const salida = await this.$axios.get(
+        'http://localhost:8081/tarea/obtenerTareas/' + parameter
+      )
+      this.optionsTareas = salida.data
     },
 
     async getOperarios(tareas, num) {
       this.step = num
-      if (tareas.length === 0) {
-        Notify.create({
-          message: 'Debe seleccionar al menos una tarea',
-          type: 'info',
-          color: 'negative'
-        })
-      } else {
-        const salida = await this.$axios.get('http://localhost:8081/operario/')
-        this.optionsOperarios = salida.data
-        if (this.optionsOperarios) {
-          Notify.create({
-            message: 'Las tareas se han cargado con éxito',
-            type: 'positive',
-            color: 'positive'
-          })
-          this.cargarTarea = true
-        } else {
-          Notify.create({
-            message: 'Error al cargar las tareas',
-            type: 'info',
-            color: 'negative'
-          })
-        }
-      }
+      const salida = await this.$axios.get('http://localhost:8081/operario/')
+      this.optionsOperarios = salida.data
     },
 
     postAsignar(operario, observacion) {
-      if (operario === '' && observacion === '') {
-        Notify.create({
-          message: 'Faltan completar algunos campos obligatorios',
-          type: 'info',
-          color: 'negative'
+      this.$axios
+        .post('http://localhost:8081/tarea/asignarTarea ', {
+          idOti: this.oti.idOti,
+          idOperario: this.operario._id,
+          observacion: this.observacion,
+          tareas: this.tareas
         })
-      } else {
-        console.log(this.tareas)
-        this.$axios
-          .post('http://localhost:8081/tarea/asignarTarea ', {
-            idOti: this.oti.idOti,
-            idOperario: this.operario._id,
-            observacion: this.observacion,
-            tareas: this.tareas
-          })
-          .then((res) => {
-            console.log(res)
-
-            if (res.status === 200) {
-              this.step = 1
-              Notify.create({
-                message: 'La tarea ha sido asignada correctamente',
-                type: 'positive',
-                color: 'positive'
-              })
-            } else {
-              Notify.create({
-                message: 'Error al asignar tarea',
-                type: 'info',
-                color: 'negative'
-              })
-            }
-          })
-          .catch((err) => {
-            console.err
-          })
-      }
+        .then((res) => {
+          console.log(res)
+          if (res.status === 200) {
+            this.step = 1
+            Notify.create({
+              message: 'La tarea ha sido asignada correctamente',
+              type: 'positive',
+              color: 'positive'
+            }),
+              (this.step = 1),
+              (this.sector = ''),
+              (this.oti = ''),
+              (this.tareas = []),
+              (this.operario = ''),
+              (this.observacion = '')
+          } else {
+            Notify.create({
+              message: 'Error al asignar tarea',
+              type: 'info',
+              color: 'negative'
+            })
+          }
+        })
+        .catch((err) => {
+          console.err
+        })
     }
   }
 }

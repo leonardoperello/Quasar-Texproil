@@ -128,7 +128,13 @@
         />
       </div>
       <div class="row justify-end q-mr-sm q-mt-sm">
-        <q-btn color="teal" label="guardar" @click="guardar()" />
+        <q-btn color="negative" label="cancelar" @click="cerrarEstado()" />
+        <q-btn
+          class="q-ml-sm"
+          color="positive"
+          label="guardar"
+          @click="guardarCambios()"
+        />
       </div>
     </q-drawer>
   </div>
@@ -178,11 +184,21 @@ export default {
     async cambiarEstadoDetalle() {
       this.drawerRight = false
     },
+
+    async cerrarEstado() {
+      this.cambiarEstado = false
+      this.drawerRight = true
+    },
+
     async Verdetalle(tarea) {
       this.drawerRight = true
       this.tarea = tarea
       this.sector = tarea.sector
     },
+    async cerrarSidebar() {
+      this.drawerRight = false
+    },
+
     async getTareas() {
       const auth = getAuth()
       const user = auth.currentUser
@@ -199,6 +215,24 @@ export default {
       )
       this.tareas = this.oti.data.tareasOperario
     },
+
+    async guardarCambios() {
+      Notify.create({
+        message: '¿Desea guardar los cambios?',
+        color: 'primary',
+        actions: [
+          {
+            label: 'Aceptar',
+            color: 'white',
+            handler: () => {
+              this.guardar()
+            }
+          },
+          { label: 'Cancelar', color: 'white' }
+        ]
+      })
+    },
+
     async guardar() {
       try {
         const tareasAUX = await this.$axios.put(
@@ -214,14 +248,23 @@ export default {
             }
           }
         )
-        console.log('se cambio de estado correctamente')
+        Notify.create({
+          message: 'Los cambios se guardaron correctamente',
+          type: 'positive',
+          color: 'positive'
+        })
         this.getTareas()
         this.cambiarEstado = false
         this.drawerRight = false
       } catch (error) {
-        console.log('no se pudo realizar el cambio de estado')
+        Notify.create({
+          message: 'Error al guardar los cambios!',
+          type: 'info',
+          color: 'negative'
+        })
       }
     }
   }
 }
+import { Notify } from 'quasar'
 </script>
