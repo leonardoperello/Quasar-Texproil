@@ -1,6 +1,6 @@
 <template>
   <div class="q-mt-sm q-mr-sm">
-    <q-toolbar class="bg-primary text-white shadow-2">
+    <q-toolbar class="bg-teal-9 text-white shadow-2">
       <q-toolbar-title>Tareas asignadas</q-toolbar-title>
     </q-toolbar>
     <q-list bordered>
@@ -55,12 +55,21 @@
       v-model="drawerRight"
       backo
       show-if-above
-      :width="600"
+      :width="ancho"
       :breakpoint="500"
       class="q-mt-sm bg-blue-grey-10 text-white"
     >
       <q-toolbar class="bg-teal-9 text-white shadow-2">
         <q-toolbar-title>Detalle tarea</q-toolbar-title>
+        <div class="row justify-end">
+          <q-btn
+            padding="xs"
+            color="red"
+            text-color="white"
+            @click="cambiarEstadoDetalle()"
+            label="Volver"
+          />
+        </div>
       </q-toolbar>
 
       <q-toolbar-title class="text-weight-bolder"
@@ -78,11 +87,7 @@
       </q-toolbar-title>
       <span align="middle">{{ tarea.fechaInicio }}</span>
       <div class="q-pa-md q-gutter-sm">
-        <q-btn
-          color="primary"
-          label="Cambiar Estado"
-          @click="cambiarEstadoD()"
-        />
+        <q-btn color="primary" label="Cambiar Estado" @click="goto()" />
         <q-btn color="secondary" label="Detalle Oti" />
       </div>
     </q-drawer>
@@ -93,12 +98,21 @@
       v-model="cambiarEstado"
       show-if-above
       backo
-      :width="600"
+      :width="ancho"
       :breakpoint="500"
       class="q-mt-sm bg-blue-grey-10"
     >
       <q-toolbar class="bg-teal-9 text-white shadow-2">
         <q-toolbar-title>Cambiar Estado</q-toolbar-title>
+        <div class="row justify-end">
+          <q-btn
+            padding="xs"
+            color="red"
+            text-color="white"
+            @click="gotod()"
+            label="Volver"
+          />
+        </div>
       </q-toolbar>
       <div class="q-pa-md q-mt-none text-white">
         <q-option-group :options="options" type="radio" v-model="group" />
@@ -127,13 +141,14 @@ export default {
   data() {
     return {
       sector: '',
-      cambiarEstado: true,
+      cambiarEstado: false,
       drawerRight: true,
       tareas: [],
       tarea: {},
       group: null,
       editor: '',
       oti: null,
+      ancho: 600,
 
       options: [
         { label: 'finalizada', value: 'finalizada', color: 'primary' },
@@ -143,18 +158,28 @@ export default {
       ]
     }
   },
+  created() {
+    if (screen.width < 1024) console.log('hola')
+    this.ancho = 320
+  },
   mounted() {
     this.cambiarEstado = false
     this.drawerRight = false
     this.getTareas()
   },
   methods: {
-    async cambiarEstadoD() {
-      this.cambiarEstado = this.cambiarEstado ? false : true
+    async gotod() {
+      this.cambiarEstado = false
+    },
+    async goto() {
+      this.drawerRight = false
+      this.cambiarEstado = true
+    },
+    async cambiarEstadoDetalle() {
+      this.drawerRight = false
     },
     async Verdetalle(tarea) {
-      this.cambiarEstado = false
-      this.drawerRight = this.drawerRight ? false : true
+      this.drawerRight = true
       this.tarea = tarea
       this.sector = tarea.sector
     },
