@@ -7,15 +7,15 @@
       class="shadow-2 rounded-borders"
     >
       <q-header elevated>
-        <q-toolbar>
+        <q-toolbar class="bg-teal-9 text-white shadow-2">
+          <q-toolbar-title> Cargar Orden de Trabajo Interna </q-toolbar-title>
           <q-btn
             padding="xs"
-            color="white"
-            text-color="black"
+            color="red"
+            text-color="white"
             label="Volver"
             to="/menu"
           />
-          <q-toolbar-title> Cargar Orden de Trabajo Interna </q-toolbar-title>
         </q-toolbar>
       </q-header>
 

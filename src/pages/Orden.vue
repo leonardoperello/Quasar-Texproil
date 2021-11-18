@@ -7,14 +7,14 @@
       class="shadow-2 rounded-borders"
     >
       <q-header elevated>
-        <q-toolbar>
+        <q-toolbar class="bg-teal-9 text-white shadow-2">
           <q-toolbar-title> CARGAR ORDEN DE PRODUCCIÓN </q-toolbar-title>
           <q-btn
             padding="xs"
             color="red"
             text-color="white"
             label="Volver"
-            to="/"
+            to="/menu"
           />
         </q-toolbar>
       </q-header>
@@ -55,7 +55,7 @@
                 </q-input>
                 <q-btn
                   class="q-ml-sm q-mt-sm"
-                  color="positive"
+                  color="teal"
                   label="Crear rosca"
                   @click="postRosca(descripcionRosca, medida, tipoRosca)"
                 />

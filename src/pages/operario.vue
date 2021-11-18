@@ -249,9 +249,3 @@ export default {
 }
 import { Notify } from 'quasar'
 </script>
-
-<style lang="scss" scoped>
-.sedebar {
-  background: #000;
-}
-</style>
