@@ -12,9 +12,6 @@
             <logo></logo>
           </q-avatar>
           Texproil
-          <q-toolbar-title>
-            {{ user ? user.displayName : '' }}
-          </q-toolbar-title>
         </q-toolbar-title>
 
         <q-btn
@@ -32,11 +29,9 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated class="bg-dark text-white">
+    <q-footer elevated class="bg-dark text-white text-right">
       <q-toolbar>
-        <q-toolbar-title>
-          <div>Texproil</div>
-        </q-toolbar-title>
+        <q-space></q-space>
         <div>Copyright 2017 © texproil / Diseñado por ig innovations</div>
       </q-toolbar>
     </q-footer>
