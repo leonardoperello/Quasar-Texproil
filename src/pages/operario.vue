@@ -128,10 +128,9 @@
         />
       </div>
       <div class="row justify-end q-mr-sm q-mt-sm">
-        <q-btn color="negative" label="cancelar" @click="cerrarEstado()" />
         <q-btn
           class="q-ml-sm"
-          color="positive"
+          color="teal"
           label="guardar"
           @click="guardarCambios()"
         />
@@ -165,8 +164,11 @@ export default {
     }
   },
   created() {
-    if (screen.width < 1024) console.log('hola')
-    this.ancho = 320
+    if (screen.width < 1024) {
+      this.ancho = 320
+    } else {
+      this.ancho = 600
+    }
   },
   mounted() {
     this.cambiarEstado = false
