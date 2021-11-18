@@ -1,6 +1,11 @@
 <template>
-  <div class="q-px-xl">
-    <q-btn color="primary" outline @click="registro"> login </q-btn>
+  <div align="center">
+    <img src="https://texproil.com.ar/images/logo/logo.png" />
+  </div>
+  <div align="center">
+    <q-btn class="q-mt-xl" size="xl" color="primary" @click="registro">
+      login
+    </q-btn>
   </div>
 </template>
 
