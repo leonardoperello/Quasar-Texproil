@@ -1,182 +1,161 @@
 <template>
-  <div class="q-pa-md">
-    <q-layout
-      view="lHh lpr lFf"
-      container
-      style="height: 400px"
-      class="shadow-2 rounded-borders"
-    >
-      <q-header elevated>
-        <q-toolbar>
-          <q-toolbar-title> ASIGNAR TAREA A OPERARIO </q-toolbar-title>
+  <div class="q-pa-md q-mt-sm">
+    <q-toolbar class="bg-teal-9 text-white shadow-2">
+      <q-toolbar-title>Asignar Tareas</q-toolbar-title>
+      <div class="row justify-end">
+        <q-btn
+          padding="xs"
+          color="red"
+          text-color="white"
+          label="Volver"
+          to="/menu"
+        />
+      </div>
+    </q-toolbar>
+
+    <q-stepper v-model="step" vertical color="primary" animated>
+      <q-step
+        :name="1"
+        title="Seleccione un sectors"
+        icon="settings"
+        :done="step > 1"
+      >
+        <q-form class="row q-col-gutter-md">
+          <div class="col-12">
+            <q-select
+              transition-show="scale"
+              transition-hide="scale"
+              filled
+              style="width: 250px"
+              v-model="sector"
+              :options="optionsSectores"
+              option-label="nombre"
+              label="Seleccione un sector"
+              lazy-rules
+              emit-value
+              map-options
+              :rules="[(val) => !!val || 'Campo obligatorio']"
+            />
+          </div>
+        </q-form>
+
+        <q-stepper-navigation>
+          <q-btn @click="getOtis(sector, 2)" color="primary" label="Continue" />
+        </q-stepper-navigation>
+      </q-step>
+
+      <q-step
+        :name="2"
+        title="Seleccione una OTI"
+        icon="create_new_folder"
+        :done="step > 2"
+      >
+        <q-form class="row q-col-gutter-md">
+          <div class="col-12">
+            <q-select
+              transition-show="scale"
+              transition-hide="scale"
+              filled
+              style="width: 250px"
+              v-model="oti"
+              :options="optionsOtis"
+              option-label="idOti"
+              label="Seleccione una OTI"
+              lazy-rules
+              emit-value
+              map-options
+              :rules="[(val) => !!val || 'Campo obligatorio']"
+            />
+          </div>
+        </q-form>
+        <q-stepper-navigation>
+          <q-btn @click="getTareas(oti, 3)" color="primary" label="Continue" />
           <q-btn
-            padding="xs"
-            color="red"
-            text-color="white"
-            label="Volver"
-            to="/"
+            flat
+            @click="step = 1"
+            color="primary"
+            label="Back"
+            class="q-ml-sm"
           />
-        </q-toolbar>
-      </q-header>
-      <q-page padding class="full-height full-width">
-        <div class="q-pa-md q-mt-md row justify-between">
-          <div class="q-pa-xs q-mt-md row items-center q-gutter-*">
-            <q-form class="row q-col-gutter-md">
-              <div class="col-12">
-                <p><b>Instrucciones para asignar una tarea a un operario</b></p>
-                <p>
-                  1. Seleccione un sector del listado y presione el botón
-                  "CARGAR SECTOR"
-                </p>
-                <p>
-                  2. Seleccione una Oti del listado y presione el botón "CARGAR
-                  OTI"
-                </p>
-                <p>
-                  3. Debe seleccionar una o varias tareas del listado y presione
-                  el botón "CARGAR TAREA"
-                </p>
-                <p>
-                  4. Por ultimo seleccione un operario y escriba una observación
-                  y presione el botón "ASIGNAR TAREA"
-                </p>
-              </div>
-            </q-form>
+        </q-stepper-navigation>
+      </q-step>
+      <q-step
+        :name="3"
+        title="Seleccione las tareas"
+        icon="create_new_folder"
+        :done="step > 3"
+      >
+        <q-form class="row q-col-gutter-md">
+          <div class="col-12">
+            <q-select
+              filled
+              v-model="tareas"
+              multiple
+              :options="optionsTareas"
+              option-label="nombre"
+              label="Multiple"
+              style="width: 250px"
+              :rules="[(val) => !!val || 'Campo obligatorio']"
+            />
           </div>
-
-          <div
-            v-if="!cargarSector"
-            class="q-pa-xs q-mt-md row items-center q-gutter-*"
-          >
-            <q-form class="row q-col-gutter-md">
-              <div class="col-12">
-                <h5>1. Seleccione un sector</h5>
-                <q-select
-                  transition-show="scale"
-                  transition-hide="scale"
-                  filled
-                  style="width: 250px"
-                  v-model="sector"
-                  :options="optionsSectores"
-                  option-label="nombre"
-                  label="Seleccione un sector"
-                  lazy-rules
-                  emit-value
-                  map-options
-                  :rules="[(val) => !!val || 'Campo obligatorio']"
-                />
-                <q-btn
-                  class="q-ml-sm q-mt-sm"
-                  color="positive"
-                  label="Cargar Sector"
-                  @click="getOtis(sector)"
-                />
-              </div>
-            </q-form>
+        </q-form>
+        <q-stepper-navigation>
+          <q-btn
+            @click="getOperarios(tareas, 4)"
+            color="primary"
+            label="Continue"
+          />
+          <q-btn
+            flat
+            @click="step = 2"
+            color="primary"
+            label="Back"
+            class="q-ml-sm"
+          />
+        </q-stepper-navigation>
+      </q-step>
+      <q-step
+        :name="4"
+        title="Seleccione un operario"
+        icon="create_new_folder"
+        :done="step > 4"
+      >
+        <q-form class="row q-col-gutter-md">
+          <div class="col-12">
+            <q-select
+              transition-show="scale"
+              transition-hide="scale"
+              filled
+              style="width: 250px"
+              v-model="operario"
+              :options="optionsOperarios"
+              option-label="nombre"
+              label="Seleccione un Operario"
+              lazy-rules
+              emit-value
+              map-options
+              :rules="[(val) => !!val || 'Campo obligatorio']"
+            />
+            <q-input v-model="observacion" label="Ingrese una observación">
+            </q-input>
           </div>
-
-          <div
-            v-if="cargarSector && !cargarOti"
-            class="q-pa-xs q-mt-md row items-center q-gutter-*"
-          >
-            <q-form class="row q-col-gutter-md">
-              <div class="col-12">
-                <h5>2. Seleccione una OTI</h5>
-                <q-select
-                  transition-show="scale"
-                  transition-hide="scale"
-                  filled
-                  style="width: 250px"
-                  v-model="oti"
-                  :options="optionsOtis"
-                  option-label="idOti"
-                  label="Seleccione una OTI"
-                  lazy-rules
-                  emit-value
-                  map-options
-                  :rules="[(val) => !!val || 'Campo obligatorio']"
-                />
-                <q-btn
-                  class="q-ml-sm q-mt-sm"
-                  color="positive"
-                  label="Cargar OTI"
-                  @click="getTareas(oti)"
-                />
-              </div>
-            </q-form>
-          </div>
-          <div
-            v-if="cargarSector && cargarOti && !cargarTarea"
-            class="q-pa-xs q-mt-md row items-center q-gutter-*"
-          >
-            <q-form class="row q-col-gutter-md">
-              <div class="col-12">
-                <h5>3. Seleccione las tarea</h5>
-                <q-select
-                  transition-show="scale"
-                  transition-hide="scale"
-                  clearable
-                  filled
-                  v-model="tareas"
-                  multiple
-                  :options="optionsTareas"
-                  option-label="nombre"
-                  counter
-                  hint="With counter"
-                  style="width: 250px"
-                  lazy-rules
-                  emit-value
-                  map-options
-                  :rules="[(val) => !!val || 'Campo obligatorio']"
-                />
-                <q-btn
-                  class="q-ml-sm q-mt-sm"
-                  color="positive"
-                  label="Cargar Tarea"
-                  @click="getOperarios(tareas)"
-                />
-              </div>
-            </q-form>
-          </div>
-          <div
-            v-if="cargarSector && cargarOti && cargarTarea"
-            class="q-pa-xs q-mt-md row items-center q-gutter-*"
-          >
-            <q-form class="row q-col-gutter-md">
-              <div class="col-12">
-                <h5>4. Seleccione un operario</h5>
-                <q-select
-                  transition-show="scale"
-                  transition-hide="scale"
-                  filled
-                  style="width: 250px"
-                  v-model="operario"
-                  :options="optionsOperarios"
-                  option-label="nombre"
-                  label="Seleccione un Operario"
-                  lazy-rules
-                  emit-value
-                  map-options
-                  :rules="[(val) => !!val || 'Campo obligatorio']"
-                />
-                <q-input
-                  v-model="observacion"
-                  label="Ingrese una observación"
-                  :rules="[(val) => !!val || 'Campo obligatorio']"
-                >
-                </q-input>
-                <q-btn
-                  class="q-ml-sm q-mt-sm"
-                  color="positive"
-                  label="Asignar tarea"
-                  @click="postAsignar(operario, observacion)"
-                />
-              </div>
-            </q-form>
-          </div>
-        </div>
-      </q-page>
-    </q-layout>
+        </q-form>
+        <q-stepper-navigation>
+          <q-btn
+            @click="postAsignar(operario, observacion)"
+            color="primary"
+            label="crear"
+          />
+          <q-btn
+            flat
+            @click="step = 3"
+            color="primary"
+            label="Back"
+            class="q-ml-sm"
+          />
+        </q-stepper-navigation>
+      </q-step>
+    </q-stepper>
   </div>
 </template>
 
@@ -197,7 +176,8 @@ export default {
       observacion: '',
       cargarSector: false,
       cargarOti: false,
-      cargarTarea: false
+      cargarTarea: false,
+      step: 1
     }
   },
 
@@ -217,7 +197,9 @@ export default {
         })
     },
 
-    async getOtis(sector) {
+    async getOtis(sector, num) {
+      this.step = num
+      console.log('hola')
       if (sector === '') {
         Notify.create({
           message: 'Debe seleccionar un sector.',
@@ -247,7 +229,8 @@ export default {
       }
     },
 
-    async getTareas(oti) {
+    async getTareas(oti, num) {
+      this.step = num
       if (oti === '') {
         Notify.create({
           message: 'Debe seleccionar una OTI.',
@@ -255,6 +238,7 @@ export default {
           color: 'negative'
         })
       } else {
+        console.log(oti.idOti)
         let parameter = oti.idOti
         const salida = await this.$axios.get(
           'http://localhost:8081/tarea/obtenerTareas/' + parameter
@@ -277,7 +261,8 @@ export default {
       }
     },
 
-    async getOperarios(tareas) {
+    async getOperarios(tareas, num) {
+      this.step = num
       if (tareas.length === 0) {
         Notify.create({
           message: 'Debe seleccionar al menos una tarea',
@@ -312,29 +297,24 @@ export default {
           color: 'negative'
         })
       } else {
+        console.log(this.tareas)
         this.$axios
           .post('http://localhost:8081/tarea/asignarTarea ', {
             idOti: this.oti.idOti,
             idOperario: this.operario._id,
-            observacion: observacion,
+            observacion: this.observacion,
             tareas: this.tareas
           })
           .then((res) => {
-            this.asignar = res.data
-            if (this.asignar) {
+            console.log(res)
+
+            if (res.status === 200) {
+              this.step = 1
               Notify.create({
                 message: 'La tarea ha sido asignada correctamente',
                 type: 'positive',
                 color: 'positive'
-              }),
-                (this.sector = ''),
-                (this.oti = ''),
-                (this.tareas = []),
-                (this.operario = ''),
-                (this.observacion = ''),
-                (this.cargarSector = false),
-                (this.cargarOti = false),
-                (this.cargarTarea = false)
+              })
             } else {
               Notify.create({
                 message: 'Error al asignar tarea',

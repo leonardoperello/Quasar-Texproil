@@ -200,9 +200,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.sedebar {
-  background: #000;
-}
-</style>

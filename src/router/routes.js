@@ -38,6 +38,13 @@ const routes = [
         meta: {
           requiresAuth: true
         }
+      },
+      {
+        path: '/asignar',
+        component: () => import('pages/AsignarTarea.vue'),
+        meta: {
+          requiresAuth: true
+        }
       }
     ]
   },
