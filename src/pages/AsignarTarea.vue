@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md q-mt-sm">
     <q-toolbar class="bg-teal-9 text-white shadow-2">
-      <q-toolbar-title>Asignar Tareas</q-toolbar-title>
+      <q-toolbar-title>ASIGNAR TAREA A OPERARIO</q-toolbar-title>
       <div class="row justify-end">
         <q-btn
           padding="xs"
@@ -140,7 +140,7 @@
         :done="step > 4"
       >
         <q-form class="row q-col-gutter-md">
-          <div class="col-12">
+          <div class="col-2">
             <q-select
               transition-show="scale"
               transition-hide="scale"
@@ -164,7 +164,7 @@
             v-if="operario && observacion"
             @click="postAsignar(operario, observacion)"
             color="positive"
-            label="crear"
+            label="Asignar tarea"
           />
           <q-btn
             v-if="!operario || !observacion"
