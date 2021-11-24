@@ -8,7 +8,7 @@
           <q-separator dark />
 
           <q-card-actions vertical align="center">
-            <q-btn flat to="/orden" padding="md">CREAR UNA NUEVA ORDEN</q-btn>
+            <q-btn flat to="/orden" padding="md">CREAR ORDEN</q-btn>
           </q-card-actions>
         </q-card>
       </div>
@@ -18,7 +18,7 @@
           <q-separator dark />
 
           <q-card-actions vertical align="center">
-            <q-btn flat to="/oti" padding="md">CREAR UNA NUEVA OTI</q-btn>
+            <q-btn flat to="/oti" padding="md">CREAR OTI</q-btn>
           </q-card-actions>
         </q-card>
       </div>
@@ -27,7 +27,7 @@
           <q-separator dark />
 
           <q-card-actions vertical align="center">
-            <q-btn flat padding="md">VISUALIZAR LAS OTIS</q-btn>
+            <q-btn flat padding="md">VISUALIZAR OTIS</q-btn>
           </q-card-actions>
         </q-card>
       </div>
@@ -39,9 +39,7 @@
           <q-separator dark />
 
           <q-card-actions vertical align="center">
-            <q-btn flat padding="md" to="/asignar"
-              >ASIGNAR UNA NUEVA TAREA</q-btn
-            >
+            <q-btn flat padding="md" to="/asignar">ASIGNAR TAREA</q-btn>
           </q-card-actions>
         </q-card>
       </div>
@@ -59,7 +57,7 @@
           <q-separator dark />
 
           <q-card-actions vertical align="center">
-            <q-btn flat padding="md">VISUALIZAR LAS TAREAS</q-btn>
+            <q-btn flat padding="md">VISUALIZAR TAREAS</q-btn>
           </q-card-actions>
         </q-card>
       </div>

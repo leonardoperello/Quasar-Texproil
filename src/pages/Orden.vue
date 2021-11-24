@@ -12,7 +12,75 @@
     </q-toolbar>
 
     <q-stepper v-model="step" vertical color="primary" animated>
-      <q-step :name="1" title="Crear rosca" icon="settings" :done="step > 1">
+      <q-step
+        :name="1"
+        title="Ingrese el cuit de un cliente"
+        icon="settings"
+        :done="step > 1"
+      >
+        <q-form class="row q-col-gutter-md">
+          <div class="col-2">
+            <q-input
+              v-model.number="cuit"
+              label="Ingresar CUIT"
+              :rules="[(val) => !!val || 'Campo obligatorio']"
+            >
+            </q-input>
+            <q-btn
+              v-if="cuit"
+              @click="getClientes(cuit, 2)"
+              color="primary"
+              label="Siguiente"
+            />
+            <q-btn v-if="!cuit" disable color="primary" label="Siguiente" />
+          </div>
+        </q-form>
+      </q-step>
+
+      <q-step
+        :name="2"
+        title="Seleccione un supervisor"
+        icon="settings"
+        :done="step > 2"
+      >
+        <q-form class="row q-col-gutter-md">
+          <div class="col-2">
+            <q-select
+              transition-show="scale"
+              transition-hide="scale"
+              filled
+              style="width: 250px"
+              v-model="supervisor"
+              :options="supervisores"
+              option-label="apellido"
+              label="Seleccione un supervisor"
+              lazy-rules
+              emit-value
+              map-options
+              :rules="[(val) => !!val || 'Campo obligatorio']"
+            />
+          </div>
+        </q-form>
+
+        <q-stepper-navigation>
+          <q-btn
+            v-if="supervisor"
+            @click="cargarSupervisor(supervisor, 3)"
+            color="primary"
+            label="Siguiente"
+          />
+          <q-btn v-if="!supervisor" disable color="primary" label="Siguiente" />
+          <q-btn
+            @click="step = 1"
+            flat
+            color="primary"
+            label="Atras"
+            class="q-ml-sm"
+          />
+        </q-stepper-navigation>
+      </q-step>
+
+      <q-step :name="3" title="Crear rosca" icon="settings" :done="step > 3">
         <q-form class="row q-col-gutter-md">
           <div class="col-2">
             <q-select
@@ -47,7 +115,7 @@
         <q-stepper-navigation>
           <q-btn
             v-if="tipoRosca && medida && descripcionRosca"
-            @click="postRosca(descripcionRosca, medida, tipoRosca, 2)"
+            @click="postRosca(descripcionRosca, medida, tipoRosca, 4)"
             color="primary"
             label="Siguiente"
           />
@@ -57,74 +125,6 @@
             color="primary"
             label="Siguiente"
           />
-        </q-stepper-navigation>
-      </q-step>
-
-      <q-step
-        :name="2"
-        title="Ingrese el cuit de un cliente"
-        icon="settings"
-        :done="step > 2"
-      >
-        <q-form class="row q-col-gutter-md">
-          <div class="col-2">
-            <q-input
-              v-model.number="cuit"
-              label="Ingresar CUIT"
-              :rules="[(val) => !!val || 'Campo obligatorio']"
-            >
-            </q-input>
-            <q-btn
-              v-if="cuit"
-              @click="getClientes(cuit, 3)"
-              color="primary"
-              label="Siguiente"
-            />
-            <q-btn v-if="!cuit" disable color="primary" label="Siguiente" />
-            <q-btn
-              @click="step = 1"
-              flat
-              color="primary"
-              label="Atras"
-              class="q-ml-sm"
-            />
-          </div>
-        </q-form>
-      </q-step>
-
-      <q-step
-        :name="3"
-        title="Seleccione un supervisor"
-        icon="settings"
-        :done="step > 3"
-      >
-        <q-form class="row q-col-gutter-md">
-          <div class="col-2">
-            <q-select
-              transition-show="scale"
-              transition-hide="scale"
-              filled
-              style="width: 250px"
-              v-model="supervisor"
-              :options="supervisores"
-              option-label="apellido"
-              label="Seleccione un supervisor"
-              lazy-rules
-              emit-value
-              map-options
-              :rules="[(val) => !!val || 'Campo obligatorio']"
-            />
-          </div>
-        </q-form>
-
-        <q-stepper-navigation>
-          <q-btn
-            v-if="supervisor"
-            @click="cargarSupervisor(supervisor, 4)"
-            color="primary"
-            label="Siguiente"
-          />
-          <q-btn v-if="!supervisor" disable color="primary" label="Siguiente" />
           <q-btn
             @click="step = 2"
             flat

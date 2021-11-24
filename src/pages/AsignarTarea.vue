@@ -42,7 +42,7 @@
         <q-stepper-navigation>
           <q-btn
             v-if="sector"
-            @click="getOtis(sector, 2)"
+            @click="getOperarios(sector, 2)"
             color="primary"
             label="Siguiente"
           />
@@ -52,9 +52,51 @@
 
       <q-step
         :name="2"
-        title="Seleccione una OTI"
+        title="Seleccione un operario"
         icon="create_new_folder"
         :done="step > 2"
+      >
+        <q-form class="row q-col-gutter-md">
+          <div class="col-2">
+            <q-select
+              transition-show="scale"
+              transition-hide="scale"
+              filled
+              style="width: 250px"
+              v-model="operario"
+              :options="optionsOperarios"
+              option-label="nombre"
+              label="Seleccione un Operario"
+              lazy-rules
+              emit-value
+              map-options
+              :rules="[(val) => !!val || 'Campo obligatorio']"
+            />
+          </div>
+        </q-form>
+        <q-stepper-navigation>
+          <q-btn
+            v-if="operario"
+            @click="getOtis(sector, 3)"
+            color="primary"
+            label="siguiente"
+          />
+          <q-btn v-if="!operario" disable color="primary" label="Siguiente" />
+          <q-btn
+            @click="step = 1"
+            flat
+            color="primary"
+            label="Atras"
+            class="q-ml-sm"
+          />
+        </q-stepper-navigation>
+      </q-step>
+
+      <q-step
+        :name="3"
+        title="Seleccione una OTI"
+        icon="create_new_folder"
+        :done="step > 3"
       >
         <q-form class="row q-col-gutter-md">
           <div class="col-12">
@@ -77,13 +119,13 @@
         <q-stepper-navigation>
           <q-btn
             v-if="oti"
-            @click="getTareas(oti, 3)"
+            @click="getTareas(oti, 4)"
             color="primary"
             label="Siguiente"
           />
           <q-btn v-if="!oti" disable color="primary" label="Siguiente" />
           <q-btn
-            @click="step = 1"
+            @click="step = 2"
             flat
             color="primary"
             label="Atras"
@@ -91,11 +133,12 @@
           />
         </q-stepper-navigation>
       </q-step>
+
       <q-step
-        :name="3"
+        :name="4"
         title="Seleccione las tareas"
         icon="create_new_folder"
-        :done="step > 3"
+        :done="step > 4"
       >
         <q-form class="row q-col-gutter-md">
           <div class="col-12">
@@ -109,68 +152,22 @@
               style="width: 250px"
               :rules="[(val) => !!val || 'Campo obligatorio']"
             />
-          </div>
-        </q-form>
-        <q-stepper-navigation>
-          <q-btn
-            v-if="tareas.length > 0"
-            @click="getOperarios(tareas, 4)"
-            color="primary"
-            label="Siguiente"
-          />
-          <q-btn
-            v-if="tareas.length === 0"
-            disable
-            color="primary"
-            label="Siguiente"
-          />
-          <q-btn
-            @click="step = 2"
-            flat
-            color="primary"
-            label="Atras"
-            class="q-ml-sm"
-          />
-        </q-stepper-navigation>
-      </q-step>
-      <q-step
-        :name="4"
-        title="Seleccione un operario"
-        icon="create_new_folder"
-        :done="step > 4"
-      >
-        <q-form class="row q-col-gutter-md">
-          <div class="col-2">
-            <q-select
-              transition-show="scale"
-              transition-hide="scale"
-              filled
-              style="width: 250px"
-              v-model="operario"
-              :options="optionsOperarios"
-              option-label="nombre"
-              label="Seleccione un Operario"
-              lazy-rules
-              emit-value
-              map-options
-              :rules="[(val) => !!val || 'Campo obligatorio']"
-            />
             <q-input v-model="observacion" label="Ingrese una observación">
             </q-input>
           </div>
         </q-form>
         <q-stepper-navigation>
           <q-btn
-            v-if="operario && observacion"
-            @click="postAsignar(operario, observacion)"
-            color="positive"
-            label="Asignar tarea"
+            v-if="tareas.length > 0 && observacion"
+            @click="postAsignar(observacion)"
+            color="primary"
+            label="Siguiente"
           />
           <q-btn
-            v-if="!operario || !observacion"
+            v-if="tareas.length === 0 || !observacion"
             disable
-            color="positive"
-            label="crear"
+            color="primary"
+            label="Siguiente"
           />
           <q-btn
             @click="step = 3"
@@ -220,6 +217,15 @@ export default {
         })
     },
 
+    async getOperarios(sector, num) {
+      this.step = num
+      const parameter = sector.nombre
+      const salida = await this.$axios.get(
+        'http://localhost:8081/operario/operarioSector/' + parameter
+      )
+      this.optionsOperarios = salida.data
+    },
+
     async getOtis(sector, num) {
       this.step = num
       const parameter = sector.nombre
@@ -238,13 +244,7 @@ export default {
       this.optionsTareas = salida.data
     },
 
-    async getOperarios(tareas, num) {
-      this.step = num
-      const salida = await this.$axios.get('http://localhost:8081/operario/')
-      this.optionsOperarios = salida.data
-    },
-
-    postAsignar(operario, observacion) {
+    postAsignar(observacion) {
       this.$axios
         .post('http://localhost:8081/tarea/asignarTarea ', {
           idOti: this.oti.idOti,
