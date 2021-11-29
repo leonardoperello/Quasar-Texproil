@@ -188,6 +188,13 @@
             color="positive"
             label="Crear orden"
           />
+          <q-btn
+            @click="step = 3"
+            flat
+            color="primary"
+            label="Atras"
+            class="q-ml-sm"
+          />
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
@@ -223,18 +230,13 @@ export default {
   },
   methods: {
     getClientes(cuit, num) {
-      this.step = num
       let parameter = cuit
       this.$axios
         .get('http://localhost:8081/cliente/' + parameter)
         .then((res) => {
           this.cliente = res.data
           if (this.cliente) {
-            Notify.create({
-              message: 'El cliente se ha cargado con exito',
-              type: 'positive',
-              color: 'positive'
-            })
+            this.step = num
           } else {
             Notify.create({
               message: 'No existe un cliente con el CUIT: ' + cuit,
@@ -244,6 +246,11 @@ export default {
           }
         })
         .catch((err) => {
+          Notify.create({
+            message: 'No existe un cliente con el CUIT: ' + cuit,
+            icon: 'close',
+            color: 'negative'
+          })
           console.err
         })
     },

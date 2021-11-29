@@ -160,14 +160,14 @@
           <q-btn
             v-if="tareas.length > 0 && observacion"
             @click="postAsignar(observacion)"
-            color="primary"
-            label="Siguiente"
+            color="positive"
+            label="Asignar tarea"
           />
           <q-btn
             v-if="tareas.length === 0 || !observacion"
             disable
-            color="primary"
-            label="Siguiente"
+            color="positive"
+            label="Asignar tarea"
           />
           <q-btn
             @click="step = 3"
